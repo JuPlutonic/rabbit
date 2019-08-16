@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: utf-8
+# frozen_string_literal: true
 
 $progname = 'Sequel migration tool'
 require 'bundler/setup'
@@ -13,22 +13,21 @@ Sequel.extension :migration
 class MQtask < Thor
   package_name 'mq'
 
-  desc "init", "Посоздавать клиентов, хосты на кролике и раздать права."
+  desc 'init', 'Create clients, rabbitmq\'s hosts and add permissions to them.'
   def init
-  # для управления пользуемся утилитой rabbitmqctl
+    # rabbitmqctl is used
     cmd = ''
-    Cfg.mq.each do |bname, data|
+    Cfg.mq.each do |_bname, data|
       cmd = <<~ECMD
-        rabbitmqctl add_vhost #{ data.conn.vhost }
-        rabbitmqctl add_user #{ data.conn.user } #{ data.conn.password }
-        rabbitmqctl set_permissions -p #{ data.conn.vhost } #{ data.conn.user } '.*' '.*' '.*'
+        rabbitmqctl add_vhost #{data.conn.vhost}
+        rabbitmqctl add_user #{data.conn.user} #{data.conn.password}
+        rabbitmqctl set_permissions -p #{data.conn.vhost} #{data.conn.user} '.*' '.*' '.*'
       ECMD
-      unless system("( #{ cmd } ) 2>/dev/null >/dev/null")
-        puts "Ошибка выполнения команды.\n#{ cmd }\n."
+      unless system("( #{cmd} ) 2>/dev/null >/dev/null")
+        puts "CSomething happen during command execution.\n#{cmd}\n."
       end
     end
   end
-
 end
 
 MQtask.start

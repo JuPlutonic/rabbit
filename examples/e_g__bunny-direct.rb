@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 ####### Direct Exchange USE-CASES
 #
@@ -12,7 +13,7 @@
 # each having an identifier (also consider using headers exchange).
 # And delivering notifications to individual software services in the network.
 #
-# FYI. There're also anycast and broadcast(=fanout exchange) messages.
+# FYI. There are also anycast and broadcast(=fanout exchange) messages.
 
 require 'bunny'
 

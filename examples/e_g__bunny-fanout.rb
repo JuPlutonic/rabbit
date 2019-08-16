@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 ####### USE-CASES
 # MMO games, sport sites, that distribute score updates to mobile clients
