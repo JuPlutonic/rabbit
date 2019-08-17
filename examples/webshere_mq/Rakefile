@@ -1,0 +1,19 @@
+# frozen_string_literal: true
+
+namespace :wmq do
+  desc 'Creates WebSphere MQ queues on development and test environments'
+  task setup: :environment do
+    wmq_configs = YAML.safe_load(File.read(File.expand_path(
+      # =>
+      'config/wmq.yml', RAILS_ROOT
+    )))
+    %w[development test].each do |environment|
+      wmq_config = wmq_configs[environment].symbolize_keys
+      puts "Connecting to #{wmq_config[:q_mgr_name]}"
+      WMQ::QueueManager.connect(wmq_config) do |q_mgr|
+        puts 'Creating ACCOUNTS.CREATED queue'
+        q_mgr.mqsc('define qlocal(ACCOUNTS.CREATED) defpsist(no)')
+      end
+    end
+  end
+end
